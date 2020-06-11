@@ -1,0 +1,16 @@
+{
+  "name": "lv-site-builder",
+  "version": "0.0.0",
+  "description": "builds HTML pages for the LightVerse out of XML content and HTML templates",
+  "main": "src/script/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Lightling",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^8.2.1",
+    "jquery": "^3.4.1"
+  }
+}
