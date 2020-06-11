@@ -12,5 +12,12 @@ $(document).ready(function() {
         })
       });
     });
-  })
+  });
+
+  $("#buttonRemoveFiles").click(function() {
+    [].slice.call($("#filelist").children()).forEach( e => {
+      if (e.classList.contains("selected"))
+        e.remove();
+    });
+  });
 });
