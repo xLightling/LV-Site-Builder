@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>LV Site Builder</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" type="text/css" href="style/index.css"/>
+  </head>
+  <body>
+    <section id="top-pane">
+      <label for="textPath">Output Path</label>
+      <input type="text" id="textPath"/>
+    </section>
+    <section id="bottom-pane">
+      <section id="list">
+        <listbox id="filelist">
+        </listbox>
+      </section>
+      <section id="buttons">
+        <input type="button" value="Add Files" id="buttonAddFiles"/>
+        <input type="button" value="Remove Files" id="buttonRemoveFiles"/>
+        <input type="button" value="Make Files" id="buttonMakeFiles"/>
+      </section>
+    </section>
+  </body>
+</html>

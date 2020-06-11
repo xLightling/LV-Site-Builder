@@ -1,0 +1,60 @@
+a, p, li, em, strong, h1, h2, h3, label {
+  font-family: sans-serif;
+  color: #ddd;
+}
+
+body {
+  background-color: #222;
+}
+
+#top-pane, #bottom-pane {
+  display: grid;
+  margin: 2rem 20vw;
+}
+
+#buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.5rem;
+}
+
+listbox {
+  padding: 0.33em;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #ddd;
+  height: 15rem;
+  margin-bottom: 1rem;
+}
+
+listbox, listelem {
+  display: block;
+}
+
+input {
+  background-color: #ccc;
+  color: #111;
+  border: none;
+  padding: 1rem;
+  transition-property: outline, color, background-color;
+  transition-timing-function: ease-out;
+  transition-duration: 0.25s;
+  outline-style: none;
+  outline-width: 2px;
+}
+
+input:focus {
+  outline-style: solid;
+  outline-color: #c90;
+  background-color: #fff;
+}
+
+input:hover {
+  background-color: #aaa;
+  color: #000;
+}
+
+input:active {
+  background-color: #999;
+  outline-color: #a50;
+}
