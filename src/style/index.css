@@ -65,6 +65,11 @@ listelem {
   padding: 0.25rem;
   overflow-x: hidden;
   overflow-y: hidden;
+  cursor: default;
+}
+
+.selected {
+  background-color: #666;
 }
 
 input {
