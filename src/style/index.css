@@ -1,3 +1,28 @@
+::-webkit-scrollbar {
+    width: 1em;
+}
+
+::-webkit-scrollbar-track {
+  background-image: linear-gradient(to left, #aaa, #888);
+}
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to right, #eee, #bbb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-image: linear-gradient(to right, #fff, #eee);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-image: linear-gradient(to left, #fff, #eee);
+}
+
+::selection {
+  background-color: #eee;
+  color: #000;
+}
+
 a, p, li, em, strong, h1, h2, h3, label, listelem {
   font-family: sans-serif;
   color: #ddd;
@@ -25,6 +50,8 @@ listbox {
   outline-color: #ddd;
   height: 15rem;
   margin-bottom: 1rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 listbox, listelem {
