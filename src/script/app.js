@@ -21,6 +21,13 @@ $(document).ready(function() {
     });
   });
 
+  $("#buttonMakeFiles").click(function() {
+    let files = [];
+    [].slice.call($("#filelist").children()).forEach( e => {
+      files.push(e.dataset.path);
+    });
+  });
+
   $("#textPath").click(function() {
     Electron.remote.dialog.showOpenDialog({ properties: [ 'openDirectory' ] }).then((data) => {
       $(this).val(data.filePaths[0]);
