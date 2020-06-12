@@ -5,7 +5,7 @@ Electron = require('electron');
 
 $(document).ready(function() {
   $("#buttonAddFiles").click(function() {
-    Electron.remote.dialog.showOpenDialog({ filters: [{ name: 'XML', extensions: [ 'xml' ] }], properties: ['openFile', 'multiSelections'] }).then((data) => {
+    Electron.remote.dialog.showOpenDialog({ filters: [{ name: 'JSON', extensions: [ 'json' ] }], properties: ['openFile', 'multiSelections'] }).then((data) => {
       data.filePaths.forEach( e => {
         $("#filelist").append(function() {
           return $('<listelem data-path="' + e + '">' + e.replace(/^.*[\\\/]/, '') + '</listelem>').click(function() {
@@ -31,11 +31,17 @@ $(document).ready(function() {
     });
 
     files.forEach( path => {
-      fs.readFile(template, 'utf8', function(err, data) {
+      let parser = new DOMParser();
+      fs.readFile(path, 'utf8', function(err, jData) {
         if (err) throw err;
 
-        let tempWindow = new jsdom.JSDOM(data, { runScripts: "outside-only" });
-        console.log(tempWindow.window.document.querySelector(".breadcrumb-nav"));
+        let jsonDoc = JSON.parse(jData);
+        fs.readFile(template, 'utf8', function(err, tData) {
+          if (err) throw err;
+
+          let tempWindow = new jsdom.JSDOM(tData, { runScripts: "outside-only" });
+          let tempDocument = tempWindow.window.document;
+        });
       });
     });
   });
