@@ -1,4 +1,6 @@
 window.$ = window.jQuery = require('jquery');
+fs = require('fs');
+jsdom = require('jsdom');
 Electron = require('electron');
 
 $(document).ready(function() {
@@ -23,8 +25,18 @@ $(document).ready(function() {
 
   $("#buttonMakeFiles").click(function() {
     let files = [];
+    let template = $("#textTemplate").val();
     [].slice.call($("#filelist").children()).forEach( e => {
       files.push(e.dataset.path);
+    });
+
+    files.forEach( path => {
+      fs.readFile(template, 'utf8', function(err, data) {
+        if (err) throw err;
+
+        let tempWindow = new jsdom.JSDOM(data, { runScripts: "outside-only" });
+        console.log(tempWindow.window.document.querySelector(".breadcrumb-nav"));
+      });
     });
   });
 
