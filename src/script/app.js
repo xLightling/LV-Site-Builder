@@ -154,6 +154,11 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       workingParent.appendChild(p);
       break;
     }
+    case "aside": {
+      let aside = doc.createElement("aside");
+      aside.innerHTML = workingContent.content;
+      workingParent.appendChild(aside);
+    }
     case "li": {
       let li = doc.createElement("li");
       li.innerHTML = workingContent.li;
