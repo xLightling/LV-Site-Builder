@@ -40,7 +40,16 @@ $(document).ready(function() {
           if (err) throw err;
 
           let tempWindow = new jsdom.JSDOM(tData, { runScripts: "outside-only" });
-          let tempDocument = tempWindow.window.document;
+          let tempDoc = tempWindow.window.document;
+          tempDoc.querySelector("#breadcrumb").innerHTML = jsonDoc.breadcrumb;
+          tempDoc.querySelector("#heading").innerHTML = "<h1>" + jsonDoc.heading + "</h1>";
+          tempDoc.querySelector("footer").innerHTML = "";
+          jsonDoc.footer.forEach( e => {
+            let p = tempDoc.createElement("p");
+            p.innerHTML = e;
+            tempDoc.querySelector("footer").appendChild(p);
+          });
+          console.log(tempDoc.body.innerHTML);
         });
       });
     });
