@@ -49,6 +49,7 @@ $(document).ready(function() {
           let tempWindow = new jsdom.JSDOM(tData, { runScripts: "outside-only" });
           let tempDoc = tempWindow.window.document;
 
+          tempDoc.title = jsonDoc.heading;
           tempDoc.querySelector("#breadcrumb").innerHTML = jsonDoc.breadcrumb;
           tempDoc.querySelector("#heading").innerHTML = "<h1>" + jsonDoc.heading + "</h1>";
           tempDoc.querySelector("footer").innerHTML = "";
@@ -63,9 +64,13 @@ $(document).ready(function() {
           nav.appendChild(navUL);
           tempDoc.querySelector("#heading").appendChild(nav);
 
-          // it is assumed that the first level content is an array of content objects
+          // It is assumed that the first level content is an array of content objects
           jsonDoc.content.forEach(c => addContent(tempDoc, c, tempDoc.querySelector("main"), navUL));
-          console.log(tempDoc.body.innerHTML);
+
+          // Write the file
+          let outPath = $("#textPath").val() + "\\" + path.replace(/^.*[\\\/]/, '').replace(".json", ".html");
+          let htmlOut = tempWindow.serialize();
+          fs.writeFileSync(outPath, htmlOut, function (err) { if (err) throw err; });
         });
       });
     });
