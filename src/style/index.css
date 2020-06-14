@@ -34,7 +34,11 @@ body {
 
 #top-pane, #bottom-pane {
   display: grid;
-  margin: 2rem 20vw;
+  margin: 0 20vw;
+}
+
+#top-pane {
+  margin-top: 2rem;
 }
 
 #buttons {
@@ -43,13 +47,13 @@ body {
   grid-gap: 0.5rem;
 }
 
-listbox {
+listbox, #output {
   padding: 0.33em;
   outline-style: solid;
   outline-width: 1px;
   outline-color: #ddd;
-  height: 15rem;
-  margin-bottom: 1rem;
+  height: 25vh;
+  margin: 1rem 0;
   overflow-y: scroll;
   overflow-x: hidden;
 }

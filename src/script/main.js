@@ -5,7 +5,7 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({
     backgroundColor: "#141414",
     minWidth: 800,
-    minHeight: 600,
+    minHeight: 800,
     webPreferences: {
       webSecurity: true,
       nodeIntegration: true

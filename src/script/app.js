@@ -37,12 +37,12 @@ $(document).ready(function() {
     // For every .json file, open and parse it
     files.forEach( path => {
       fs.readFile(path, 'utf8', function(err, jData) {
-        if (err) throw err;
+        if (err) $("#output").append($("<p>" + err + "</p>"));
 
         let jsonDoc = JSON.parse(jData);
         // Open the template
         fs.readFile(template, 'utf8', function(err, tData) {
-          if (err) throw err;
+          if (err) $("#output").append($("<p>" + err + "</p>"));
 
           // Use JSDOM to edit template, grab reference to window.document
           // Note that tData and jData are strings, tempDoc and jsonDoc are the actual objects to use
@@ -70,7 +70,12 @@ $(document).ready(function() {
           // Write the file
           let outPath = $("#textPath").val() + "\\" + path.replace(/^.*[\\\/]/, '').replace(".json", ".html");
           let htmlOut = tempWindow.serialize();
-          fs.writeFileSync(outPath, htmlOut, function (err) { if (err) throw err; });
+          fs.writeFile(outPath, htmlOut, function (err) {
+            if (err)
+              $("#output").append($("<p>" + err + "</p>"));
+            else
+              $("#output").append($("<p>Wrote " + outPath + " successfully</p>"));
+          });
         });
       });
     });
@@ -171,7 +176,10 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       break;
     }
     default:
-      console.log("Error: Unknown value of type " + workingContent.type + " in the following content block: " + workingContent.toString());
+      $("#output").append(
+        $("<p>" + "Error: Unknown value of type " + workingContent.type +
+        " in the following content block: " + workingContent.toString() + "</p>")
+      );
       break;
   }
 }
