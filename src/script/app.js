@@ -64,7 +64,7 @@ $(document).ready(function() {
           tempDoc.querySelector("#heading").appendChild(nav);
 
           // it is assumed that the first level content is an array of content objects
-          jsonDoc.content.forEach(c => { addContent(tempDoc, c, tempDoc.querySelector("main"), navUL); });
+          jsonDoc.content.forEach(c => addContent(tempDoc, c, tempDoc.querySelector("main"), navUL));
           console.log(tempDoc.body.innerHTML);
         });
       });
@@ -88,16 +88,16 @@ $(document).ready(function() {
 
 /*
 ** Navigates through content and appends it to the body, attaches to navigation if applicable (sections), and recurses if there is deeper content
-** document: needed for creating elements
+** doc: the JSDOM document needed for creating elements
 ** workingContent: the current working content - child content can be an array of content objects or a string;
 **    strings are directly appended based on type (i.e. type="p" creates p node);
 **    arrays of objects are recursed (e.g. sections create a section that becomes the new working parent)
 ** workingParent: the Node to call appendChild() on
 ** workingNav: the Node to appendChild() navigation on if the content is of type "section"
 */
-function addContent(document, workingContent, workingParent, workingNav) {
+function addContent(doc, workingContent, workingParent, workingNav) {
   switch(workingContent.type) {
-    case "section":
+    case "section": {
       // Determine heading
       let num = 2; // this will be incremented for every level the section is; starts at 2 because 1 is reserved for the page heading
       let parent = workingParent;
@@ -108,16 +108,16 @@ function addContent(document, workingContent, workingParent, workingNav) {
         parent = parent.parentNode;
       }
       // Handle heading creation
-      let s = document.createElement("section");
-      let heading = document.createElement("h" + num);
+      let s = doc.createElement("section");
+      let heading = doc.createElement("h" + num);
       heading.innerHTML = workingContent.title;
       heading.id = workingContent.nav;
       s.appendChild(heading);
       workingParent.appendChild(s);
 
       // Handle navigation
-      let li = document.createElement("li");
-      let a = document.createElement("a");
+      let li = doc.createElement("li");
+      let a = doc.createElement("a");
       a.href = "#" + workingContent.nav;
       a.innerHTML = workingContent.title;
       li.appendChild(a);
@@ -128,19 +128,43 @@ function addContent(document, workingContent, workingParent, workingNav) {
       else {
         // Grab the ul in the workingNav, or create one if one is not yet present
         let ul = workingNav.querySelector("ul");
-        if (ul === null)
-          ul = document.createElement("ul");
-        workingNav.appendChild(ul);
+        if (ul === null) {
+          ul = doc.createElement("ul");
+          workingNav.appendChild(ul);
+        }
         ul.appendChild(li);
       }
 
-      workingContent.content.forEach( c => addContent(document, c, s, li));
+      workingContent.content.forEach( c => addContent(doc, c, s, li));
       break;
-    case "p":
-      let p = document.createElement("p");
+    }
+    case "p": {
+      let p = doc.createElement("p");
       p.innerHTML = workingContent.content;
       workingParent.appendChild(p);
       break;
+    }
+    case "li": {
+      let li = doc.createElement("li");
+      li.innerHTML = workingContent.li;
+      workingParent.appendChild(li);
+      break;
+    }
+    case "ul": {
+      let ul = doc.createElement("ul");
+      workingParent.appendChild(ul);
+      workingContent.ul.forEach( c => addContent(doc, c, ul, workingNav));
+      break;
+    }
+    case "li-ul": {
+      let ul = doc.createElement("ul");
+      let li = doc.createElement("li");
+      li.innerHTML = workingContent.li;
+      workingParent.appendChild(li);
+      li.appendChild(ul);
+      workingContent.ul.forEach( c => addContent(doc, c, ul, workingNav));
+      break;
+    }
     default:
       console.log("Error: Unknown value of type " + workingContent.type + " in the following content block: " + workingContent.toString());
       break;
