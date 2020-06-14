@@ -136,7 +136,13 @@ function addContent(document, workingContent, workingParent, workingNav) {
 
       workingContent.content.forEach( c => addContent(document, c, s, li));
       break;
+    case "p":
+      let p = document.createElement("p");
+      p.innerHTML = workingContent.content;
+      workingParent.appendChild(p);
+      break;
     default:
+      console.log("Error: Unknown value of type " + workingContent.type + " in the following content block: " + workingContent.toString());
       break;
   }
 }
