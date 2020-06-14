@@ -39,7 +39,12 @@ $(document).ready(function() {
       fs.readFile(path, 'utf8', function(err, jData) {
         if (err) $("#output").append($("<p>" + err + "</p>"));
 
-        let jsonDoc = JSON.parse(jData);
+        try {
+          let jsonDoc = JSON.parse(jData);
+        }
+        catch (err) {
+          $("#output").append($("<p>" + err + "</p>"));
+        }
         // Open the template
         fs.readFile(template, 'utf8', function(err, tData) {
           if (err) $("#output").append($("<p>" + err + "</p>"));
