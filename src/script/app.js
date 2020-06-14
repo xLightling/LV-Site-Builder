@@ -63,7 +63,9 @@ $(document).ready(function() {
           nav.appendChild(navUL);
           tempDoc.querySelector("#heading").appendChild(nav);
 
-          jsonDoc.content.forEach(c => { addContent(c, tempDoc.querySelector("main"), navUL); });
+          // it is assumed that the first level content is an array of content objects
+          jsonDoc.content.forEach(c => { addContent(tempDoc, c, tempDoc.querySelector("main"), navUL); });
+          console.log(tempDoc.body.innerHTML);
         });
       });
     });
@@ -86,11 +88,53 @@ $(document).ready(function() {
 
 /*
 ** Navigates through content and appends it to the body, attaches to navigation if applicable (sections), and recurses if there is deeper content
+** document: needed for creating elements
+** workingContent: the current working content - child content can be an array of content objects or a string;
+**    strings are directly appended based on type (i.e. type="p" creates p node);
+**    arrays of objects are recursed (e.g. sections create a section that becomes the new working parent)
+** workingParent: the Node to call appendChild() on
+** workingNav: the Node to appendChild() navigation on if the content is of type "section"
 */
-function addContent(content, parentNode, navNode) {
-  switch(content.type) {
+function addContent(document, workingContent, workingParent, workingNav) {
+  switch(workingContent.type) {
     case "section":
-      console.log("works");
+      // Determine heading
+      let num = 2; // this will be incremented for every level the section is; starts at 2 because 1 is reserved for the page heading
+      let parent = workingParent;
+      // Navigate upward until no more parents are left, incrementing heading number if a parent is a section
+      while (!(parent.parentNode === null)) {
+        if (parent.tagName === "SECTION")
+          num++;
+        parent = parent.parentNode;
+      }
+      // Handle heading creation
+      let s = document.createElement("section");
+      let heading = document.createElement("h" + num);
+      heading.innerHTML = workingContent.title;
+      heading.id = workingContent.nav;
+      s.appendChild(heading);
+      workingParent.appendChild(s);
+
+      // Handle navigation
+      let li = document.createElement("li");
+      let a = document.createElement("a");
+      a.href = "#" + workingContent.nav;
+      a.innerHTML = workingContent.title;
+      li.appendChild(a);
+      // The first level of addContent means that workingNav will be ul
+      if (workingNav.tagName === "UL")
+        workingNav.appendChild(li);
+      // Once recursion starts, workingNav will be li
+      else {
+        // Grab the ul in the workingNav, or create one if one is not yet present
+        let ul = workingNav.querySelector("ul");
+        if (ul === null)
+          ul = document.createElement("ul");
+        workingNav.appendChild(ul);
+        ul.appendChild(li);
+      }
+
+      workingContent.content.forEach( c => addContent(document, c, s, li));
       break;
     default:
       break;
