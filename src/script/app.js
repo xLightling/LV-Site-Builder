@@ -39,49 +39,52 @@ $(document).ready(function() {
       fs.readFile(path, 'utf8', function(err, jData) {
         if (err) $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + ")</p>"));
 
+        let jsonDoc;
         try {
-          let jsonDoc = JSON.parse(jData);
+          jsonDoc = JSON.parse(jData);
         }
         catch (err) {
           $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + ")</p>"));
         }
         // Open the template
-        fs.readFile(template, 'utf8', function(err, tData) {
-          if (err) $("#output").append($("<p>" + err + "(relevant file: " + template.replace(/^.*[\\\/]/, '') + ")</p>"));
+        if (jsonDoc) {
+          fs.readFile(template, 'utf8', function(err, tData) {
+            if (err) $("#output").append($("<p>" + err + "(relevant file: " + template.replace(/^.*[\\\/]/, '') + ")</p>"));
 
-          // Use JSDOM to edit template, grab reference to window.document
-          // Note that tData and jData are strings, tempDoc and jsonDoc are the actual objects to use
-          let tempWindow = new jsdom.JSDOM(tData, { runScripts: "outside-only" });
-          let tempDoc = tempWindow.window.document;
+            // Use JSDOM to edit template, grab reference to window.document
+            // Note that tData and jData are strings, tempDoc and jsonDoc are the actual objects to use
+            let tempWindow = new jsdom.JSDOM(tData, { runScripts: "outside-only" });
+            let tempDoc = tempWindow.window.document;
 
-          tempDoc.title = jsonDoc.heading;
-          tempDoc.querySelector("#breadcrumb").innerHTML = jsonDoc.breadcrumb;
-          tempDoc.querySelector("#heading").innerHTML = "<h1>" + jsonDoc.heading + "</h1>";
-          tempDoc.querySelector("footer").innerHTML = "";
-          jsonDoc.footer.forEach( e => {
-            let p = tempDoc.createElement("p");
-            p.innerHTML = e;
-            tempDoc.querySelector("footer").appendChild(p);
+            tempDoc.title = jsonDoc.heading;
+            tempDoc.querySelector("#breadcrumb").innerHTML = jsonDoc.breadcrumb;
+            tempDoc.querySelector("#heading").innerHTML = "<h1>" + jsonDoc.heading + "</h1>";
+            tempDoc.querySelector("footer").innerHTML = "";
+            jsonDoc.footer.forEach( e => {
+              let p = tempDoc.createElement("p");
+              p.innerHTML = e;
+              tempDoc.querySelector("footer").appendChild(p);
+            });
+
+            let nav = tempDoc.createElement("nav");
+            let navUL = tempDoc.createElement("ul");
+            nav.appendChild(navUL);
+            tempDoc.querySelector("#heading").appendChild(nav);
+
+            // It is assumed that the first level content is an array of content objects
+            jsonDoc.content.forEach(c => addContent(tempDoc, c, tempDoc.querySelector("main"), navUL));
+
+            // Write the file
+            let outPath = $("#textPath").val() + "\\" + path.replace(/^.*[\\\/]/, '').replace(".json", ".html");
+            let htmlOut = tempWindow.serialize();
+            fs.writeFile(outPath, htmlOut, function (err) {
+              if (err)
+                $("#output").append($("<p>" + err + "</p>"));
+              else
+                $("#output").append($("<p>Wrote " + outPath + " successfully</p>"));
+            });
           });
-
-          let nav = tempDoc.createElement("nav");
-          let navUL = tempDoc.createElement("ul");
-          nav.appendChild(navUL);
-          tempDoc.querySelector("#heading").appendChild(nav);
-
-          // It is assumed that the first level content is an array of content objects
-          jsonDoc.content.forEach(c => addContent(tempDoc, c, tempDoc.querySelector("main"), navUL));
-
-          // Write the file
-          let outPath = $("#textPath").val() + "\\" + path.replace(/^.*[\\\/]/, '').replace(".json", ".html");
-          let htmlOut = tempWindow.serialize();
-          fs.writeFile(outPath, htmlOut, function (err) {
-            if (err)
-              $("#output").append($("<p>" + err + "</p>"));
-            else
-              $("#output").append($("<p>Wrote " + outPath + " successfully</p>"));
-          });
-        });
+        }
       });
     });
   });
