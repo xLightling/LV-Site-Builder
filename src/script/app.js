@@ -43,7 +43,7 @@ $(document).ready(function() {
           let jsonDoc = JSON.parse(jData);
         }
         catch (err) {
-          $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + "</p>"));
+          $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + ")</p>"));
         }
         // Open the template
         fs.readFile(template, 'utf8', function(err, tData) {
