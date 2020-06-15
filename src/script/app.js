@@ -86,7 +86,7 @@ $(document).ready(function() {
               if (err)
                 $("#output").append($("<p>" + err + "</p>"));
               else
-                $("#output").append($("<p>Wrote " + outPath + " successfully</p>"));
+                $("#output").append($("<p>Wrote " + outPath.replace(/^.*[\\\/]/, '') + " successfully</p>"));
             });
           });
         }
