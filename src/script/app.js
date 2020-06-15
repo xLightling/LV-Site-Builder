@@ -37,17 +37,17 @@ $(document).ready(function() {
     // For every .json file, open and parse it
     files.forEach( path => {
       fs.readFile(path, 'utf8', function(err, jData) {
-        if (err) $("#output").append($("<p>" + err + "</p>"));
+        if (err) $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + ")</p>"));
 
         try {
           let jsonDoc = JSON.parse(jData);
         }
         catch (err) {
-          $("#output").append($("<p>" + err + "</p>"));
+          $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + "</p>"));
         }
         // Open the template
         fs.readFile(template, 'utf8', function(err, tData) {
-          if (err) $("#output").append($("<p>" + err + "</p>"));
+          if (err) $("#output").append($("<p>" + err + "(relevant file: " + template.replace(/^.*[\\\/]/, '') + ")</p>"));
 
           // Use JSDOM to edit template, grab reference to window.document
           // Note that tData and jData are strings, tempDoc and jsonDoc are the actual objects to use
