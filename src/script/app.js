@@ -72,7 +72,12 @@ $(document).ready(function() {
             tempDoc.querySelector("#heading").appendChild(nav);
 
             // It is assumed that the first level content is an array of content objects
-            jsonDoc.content.forEach(c => addContent(tempDoc, c, tempDoc.querySelector("main"), navUL));
+            try {
+              jsonDoc.content.forEach(c => addContent(tempDoc, c, tempDoc.querySelector("main"), navUL));
+            }
+            catch (err) {
+              $("#output").append($("<p>" + err + "(relevant file: " + path.replace(/^.*[\\\/]/, '') + ")</p>"));
+            }
 
             // Write the file
             let outPath = $("#textPath").val() + "\\" + path.replace(/^.*[\\\/]/, '').replace(".json", ".html");
