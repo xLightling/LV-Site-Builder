@@ -63,16 +63,16 @@ Example:
 }
 ```
 
-`breadcrumb`, `heading`: LightVerse-required string properties
-`footer`: LightVerse-required string-array property
-`content`: Core property; at top-most level, **must** be an array of content-objects; otherwise, can be an array of content-objects or a string
-`type`: Required property of any type of content-object
-- p : Represents a paragraph element; requires string-based `content` property
-- ul : Represents an unordered list; requires an array-based `ul` property (note: not `content`, due to li-ul requiring two things; semantically, `ul`'s members should be li or li-ul)
-- li : Represents a list element; requires a string-based `li` property (note: not `content`, due to li-ul requiring two things)
-- li-ul : Represents a list element that has a child list; requires a string-based `li` property and an array-based `ul` property
-- aside : Represents an aside; temporarily, aside has been treated as nearly identical to p, and as such innerHTML is hardcoded into the JSON; this may change at a later time due to violating the idea of avoiding HTML with the content
-- section : Represents a section of content; requires a string-based `title` property (becomes a heading element), a string-based `nav` property (becomes the id of the section that the page navigation can point to), and an array-based `content` property
+`breadcrumb`, `heading`: LightVerse-required string properties  
+`footer`: LightVerse-required string-array property  
+`content`: Core property; at top-most level, **must** be an array of content-objects; otherwise, can be an array of content-objects or a string  
+`type`: Required property of any type of content-object  
+- `p` : Represents a paragraph element; requires string-based `content` property
+- `ul` : Represents an unordered list; requires an array-based `ul` property (note: not `content`, due to li-ul requiring two things; semantically, `ul`'s members should be li or li-ul)
+- `li` : Represents a list element; requires a string-based `li` property (note: not `content`, due to li-ul requiring two things)
+- `li-ul` : Represents a list element that has a child list; requires a string-based `li` property and an array-based `ul` property
+- `aside` : Represents an aside; temporarily, aside has been treated as nearly identical to p, and as such innerHTML is hardcoded into the JSON; this may change at a later time due to violating the idea of avoiding HTML with the content
+- `section` : Represents a section of content; requires a string-based `title` property (becomes a heading element), a string-based `nav` property (becomes the id of the section that the page navigation can point to), and an array-based `content` property
 
 `type`s that have array-based content cause `addContent()` to recurse.
 
