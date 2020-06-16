@@ -158,6 +158,8 @@ function addContent(doc, workingContent, workingParent, workingNav) {
         ul.appendChild(li);
       }
 
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => s.classList.add(c));
       workingContent.content.forEach( c => addContent(doc, c, s, li));
       break;
     }
@@ -165,23 +167,31 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       let p = doc.createElement("p");
       p.innerHTML = workingContent.content;
       workingParent.appendChild(p);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => p.classList.add(c));
       break;
     }
     case "aside": {
       let aside = doc.createElement("aside");
       aside.innerHTML = workingContent.content;
       workingParent.appendChild(aside);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => aside.classList.add(c));
       break;
     }
     case "li": {
       let li = doc.createElement("li");
       li.innerHTML = workingContent.li;
       workingParent.appendChild(li);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => li.classList.add(c));
       break;
     }
     case "ul": {
       let ul = doc.createElement("ul");
       workingParent.appendChild(ul);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => ul.classList.add(c));
       workingContent.ul.forEach( c => addContent(doc, c, ul, workingNav));
       break;
     }
@@ -191,6 +201,8 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       li.innerHTML = workingContent.li;
       workingParent.appendChild(li);
       li.appendChild(ul);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => li.classList.add(c));
       workingContent.ul.forEach( c => addContent(doc, c, ul, workingNav));
       break;
     }
@@ -206,6 +218,8 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       div.appendChild(img);
       div.appendChild(p);
       workingParent.appendChild(div);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => div.classList.add(c));
       break;
     }
     default:
