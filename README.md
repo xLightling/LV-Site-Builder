@@ -51,6 +51,12 @@ Example:
 					"content: "Paragraph attached to section"
 				},
 				{
+					"type": "img",
+					"alt": "alt tag here",
+					"caption": "caption for img.title and a p element",
+					"src": "/path/to/image.whatever"
+				},
+				{
 					"type": "aside",
 					"content": "<p>An aside</p>"
 				}
@@ -68,14 +74,18 @@ Example:
 `content`: Core property; at top-most level, **must** be an array of content-objects; otherwise, can be an array of content-objects or a string  
 `type`: Required property of any type of content-object  
 - `p` : Represents a paragraph element; requires string-based `content` property
-- `ul` : Represents an unordered list; requires an array-based `ul` property (note: not `content`, due to li-ul requiring two things; semantically, `ul`'s members should be li or li-ul)
-- `li` : Represents a list element; requires a string-based `li` property (note: not `content`, due to li-ul requiring two things)
-- `li-ul` : Represents a list element that has a child list; requires a string-based `li` property and an array-based `ul` property
+- `ul` : Represents an unordered list; requires an array-based `ul` property (note: not `content`, due to li-ul requiring two things; semantically, `ul`'s members should be li, li-ul, or li-ol)
+- `li` : Represents a list element; requires a string-based `li` property (note: not `content`, due to li-ul and li-ol requiring two things)
+- `li-ul` : Represents a list element that has a child unordered list; requires a string-based `li` property and an array-based `ul` property
+- `ol` : Represents an ordered list; requires an array-based `ol` property (note: not `content`, due to li-ol requiring two things; semantically, `ol`'s members should be li, li-ul, or li-ol)
+- `li-ol` : Represents a list element that has a child ordered list; requires a string-based `li` property and an array-based `ol` property
 - `aside` : Represents an aside; temporarily, aside has been treated as nearly identical to p, and as such innerHTML is hardcoded into the JSON; this may change at a later time due to violating the idea of avoiding HTML with the content
 - `section` : Represents a section of content; requires a string-based `title` property (becomes a heading element), a string-based `nav` property (becomes the id of the section that the page navigation can point to), and an array-based `content` property
+- `img` : Represents an image element; requires a string-based `alt` property (becomes img.alt), a string-based `caption` property (becomes img.title and a paragraph element with class "caption" below the image), and a string-based `src` property (becomes img.src) (note: the image and paragraph elements are parented to a singular div; the optional `classes` property is applied to the div)
 
-`type`s that have array-based content cause `addContent()` to recurse.
+`type`s that have array-based content cause `addContent()` to recurse. Every single content-object has an optional `classes` string-array so that classes can be applied to the elements that are created.
 
-Because handling links with paragraph elements would become very complicated and out-of-scope, a tags still must be hardcoded into the JSON; Support for span may come at a later time (ol and img will definitely be coming soon), which would allow one to avoid this (though one must hardcode <br/> to get line breaks; it may also lead to confusing JSON content, thus why hard-coding the a tags into paragraph elements seemed the better alternative)
+Because handling links with paragraph elements would become very complicated and out-of-scope, a tags still must be hardcoded into the JSON; Support for span may come at a later time, which would allow one to avoid this (though one must hardcode <br/> to get line breaks; it may also lead to confusing JSON content, thus why hard-coding the a tags into paragraph elements seemed the better alternative).  
+For now, only the `li` element gets classes applied when using `li-ul` or `li-ol` in tandem with the `classes` property. The optional property may be changed at a later time to allow specification for what to apply the classes to (for example, splitting `classes` to `li-classes` and `ol-classes`/`ul-classes`, or making `classes` be an array of objects that holds true/false for those elements then defines a singular class all per object)
 
 JSON was chosen as the format due to it being a mostly readable format, versatility, and parsing being a native function. XML was slightly more cluttered and too similar to HTML. While it was easier to encounter syntax errors with JSON (errors of which are somewhat difficult to report with the information that is available at certain points) and document line-count increased, it was easier to navigate and write in than XML.
