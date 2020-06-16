@@ -194,6 +194,20 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       workingContent.ul.forEach( c => addContent(doc, c, ul, workingNav));
       break;
     }
+    case "img": {
+      let div = doc.createElement("div");
+      let img = doc.createElement("img");
+      let p =  doc.createElement("p");
+      img.src = workingContent.src;
+      img.alt = workingContent.alt;
+      img.title = workingContent.caption;
+      p.innerHTML = workingContent.caption;
+      p.classList.add("caption");
+      div.appendChild(img);
+      div.appendChild(p);
+      workingParent.appendChild(div);
+      break;
+    }
     default:
       $("#output").append(
         $("<p>" + "Error: Unknown value of type " + workingContent.type +
