@@ -206,6 +206,25 @@ function addContent(doc, workingContent, workingParent, workingNav) {
       workingContent.ul.forEach( c => addContent(doc, c, ul, workingNav));
       break;
     }
+    case "ol": {
+      let ol = doc.createElement("ol");
+      workingParent.appendChild(ol);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => ol.classList.add(c));
+      workingContent.ol.forEach( c => addContent(doc, c, ol, workingNav));
+      break;
+    }
+    case "li-ol": {
+      let ol = doc.createElement("ol");
+      let li = doc.createElement("li");
+      li.innerHTML = workingContent.li;
+      workingParent.appendChild(li);
+      li.appendChild(ol);
+      if (workingContent.hasOwnProperty("classes"))
+        workingContent.classes.forEach( c => li.classList.add(c));
+      workingContent.ol.forEach( c => addContent(doc, c, ol, workingNav));
+      break;
+    }
     case "img": {
       let div = doc.createElement("div");
       let img = doc.createElement("img");
